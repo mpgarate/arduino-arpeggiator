@@ -12,14 +12,14 @@ void loop(){
   int btnVal2 = digitalRead(btn2);
   
   if (btnVal1 == 1 && !btn1_is_on){
-    Serial.print("A4");
+    Serial.print("1");
     Serial.write(",");
   }
   else if (btn1 == 0){
     btn1_is_on = true;
   }
   if (btnVal2 == 1 && !btn2_is_on){
-    Serial.print("B4");
+    Serial.print("2");
     Serial.write(",");
   }
   else if (btn2 == 0){
