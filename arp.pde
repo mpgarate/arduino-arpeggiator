@@ -17,7 +17,7 @@ Minim minim;
 AudioPlayer note, lastNote;
 
 int savedTime;
-int totalTime = 1000;
+int totalTime = 200;
 
 int lastIndex = -1;
 
@@ -90,6 +90,9 @@ void draw()
     playNextNote(activeNotes);
     println("last index:" + lastIndex);
     savedTime = millis();
+  }
+  else if (passedTime > totalTime - 100){
+    minim.stop();
   }
   
   background(0);
