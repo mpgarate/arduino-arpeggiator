@@ -9,26 +9,48 @@ int btnVal1;
 int btnVal2;
 
 String [] btnVals;
-String [] indextoStringMap = new String[] {"C4","D4"};
+String [] indexToStringMap = new String[] {"C4","D4"};
 
 Boolean activeNotes[];
 
 Minim minim;
-AudioPlayer C4,D4,E4,F4,G4,A4,B4, lastNote;
+AudioPlayer note, lastNote;
 
 int savedTime;
 int totalTime = 1000;
 
+int lastIndex = -1;
+
 LinkedList list = new LinkedList();
 
-void playNextNote(){
-  if (list.size() == 0) return;
-  println(list.getFirst());
-  //if (Integer.parseInt(list.getFirst().toString()) == 0) return;
-  A4 = minim.loadFile(list.getFirst() + ".wav");
-  Object first = list.pop();
-  list.offerLast(first);
-  A4.play();
+void playNextNote(Boolean[] activeNotes){
+  if (activeNotes.length == 0) return;
+  String noteName = "";
+  int noteIndex = -1;
+  for(int i = lastIndex + 1; i < activeNotes.length; i++){
+    if (activeNotes[i] == true){
+      noteName = indexToStringMap[i-1];
+      noteIndex = i;
+      break;
+    }
+  }
+  if (noteIndex == -1){
+    for (int i = 0; i < lastIndex + 1; i++){
+      if (activeNotes[i] == true){
+        noteName = indexToStringMap[i-1];
+        noteIndex = i;
+        break;
+      }
+    }  
+  }
+  
+  if (noteName.length() == 0 || noteIndex == -1){
+    return;
+  }
+  note = minim.loadFile(noteName + ".wav");
+  note.play();
+  
+  lastIndex = noteIndex;
 }
 
 void setup()
@@ -40,16 +62,15 @@ void setup()
  
   minim = new Minim(this);
  
-  
   savedTime = millis();
 }
  
 void draw()
 {
   // clear all notes on each pulse
-  list = new LinkedList();
   activeNotes = new Boolean[] {false,false,false,false,false,false,false};
   
+  //list = new LinkedList();
   while (arduinoPort.available() > 0){
     input = arduinoPort.readStringUntil('*');
     if (input != null){
@@ -57,15 +78,7 @@ void draw()
       
       for (int i = 0; i < btnVals.length; i++){
         int value = parseInt(btnVals[i]);
-        println("got value: " + value);
-        if (activeNotes[value] == false){
-          String noteName = indextoStringMap[value - 1];
-          list.add(noteName);
-          activeNotes[value] = true;
-        }
-        else{
-          activeNotes[value] = true;
-        }
+        activeNotes[value] = true;
       }
     }
   }
@@ -74,10 +87,9 @@ void draw()
   int passedTime = millis() - savedTime;
   //println(passedTime + " : " + totalTime);
   if (passedTime > totalTime){
-    lastNote = null;
-    playNextNote();
+    playNextNote(activeNotes);
+    println("last index:" + lastIndex);
     savedTime = millis();
-    lastNote = A4;
   }
   
   background(0);
