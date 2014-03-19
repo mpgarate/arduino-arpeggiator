@@ -7,7 +7,19 @@ Serial arduinoPort;
 
 String input;
 
-float [] indexToHz = new float[] {440.0, 493.88, 523.25};
+float hz(String s){
+  return Frequency.ofPitch(s).asHz();
+}
+
+float [] indexToHz = new float[] {
+  hz("C4"),
+  hz("D4"),
+  hz("E4"),
+  hz("F4"),
+  hz("G4"),
+  hz("A5"),
+  hz("B5")
+};
 
 Boolean activeNotes[];
 
@@ -70,16 +82,17 @@ void setup()
 }
 
 void playNoteIndex(int noteIndex){
-  //wave.setFrequency(indexToHz[noteIndex]);
-  //wave.setAmplitude(0.5);
- // wave.playNote();
- out.playNote( 0.0, 0.1, new SineInstrument(indexToHz[noteIndex]) );
+  out.playNote( 0.0, 0.1, new SineInstrument(indexToHz[noteIndex]) );
 }
  
  
- void serialEvent(Serial port) { 
-   int input = port.read();
-   playNoteIndex(input - 48);
-   println( "Raw Input: " + input); 
- } 
+void serialEvent(Serial port) { 
+  int input = port.read();
+  playNoteIndex(input - 48);
+  println( "Raw Input: " + input); 
+} 
  
+void draw()
+{
+  
+}

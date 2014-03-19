@@ -1,11 +1,10 @@
 
-const int POSSIBLE_NOTES = 3;
-//const int button_pins[] = {13, 12, 11, 10, 9, 8, 7};
-const int button_pins[] = {13, 12, 11}; //, 10, 9, 8, 7};
-int button_values[] = {0, 0, 0}; //, 0, 0, 0, 0};
+const int POSSIBLE_NOTES = 7;
+const int button_pins[] = {13, 12, 11, 10, 9, 8, 7};
+int button_values[] = {0, 0, 0, 0, 0, 0, 0};
 
 // active_notes[i] == 1 if note i is active
-int active_notes[] = {0, 0, 0}; //, 0, 0, 0, 0};
+int active_notes[] = {0, 0, 0, 0, 0, 0, 0};
 
 int next_note = -1;
 
@@ -78,7 +77,6 @@ void play_note(int note){
     return;
   }
   Serial.print(note);
-  Serial.print("\n");
   //Serial.flush();
 }
 
