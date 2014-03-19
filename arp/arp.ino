@@ -1,11 +1,16 @@
 
-const int POSSIBLE_NO = 3;
+const int POSSIBLE_NOTES = 3;
 //const int button_pins[] = {13, 12, 11, 10, 9, 8, 7};
 const int button_pins[] = {13, 12, 11}; //, 10, 9, 8, 7};
 int button_values[] = {0, 0, 0}; //, 0, 0, 0, 0};
 
 // active_notes[i] == 1 if note i is active
 int active_notes[] = {0, 0, 0}; //, 0, 0, 0, 0};
+
+int next_note = -1;
+
+long previousMillis = 0;
+long interval = 300;
 
 void setup(){
   Serial.begin(9600);
@@ -54,7 +59,6 @@ int get_next_note(){
     for (i = 0; i < previous_note+1; i++); {
       if (active_notes[i] == 1){
         next_note = i;
-        Serial.println("next_note: " + i);
       }
     }
   }
@@ -74,15 +78,18 @@ void play_note(int note){
   }
   Serial.print(note);
   Serial.write("\n");
+  Serial.flush();
 }
 
 void loop(){
-  set_button_values();
-  set_active_notes();
-  int next_note = get_next_note();
-  play_note(next_note);
-  previous_note = next_note;
-  
-  //Serial.write(potVal1 + "," + potVal2 + '\n');
-  delay(100);
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis > interval){
+    
+    play_note(next_note);
+    previousMillis = currentMillis;
+    set_button_values();
+    set_active_notes();
+    next_note = get_next_note();
+    previous_note = next_note;
+  }
 }
