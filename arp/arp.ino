@@ -10,7 +10,7 @@ int active_notes[] = {0, 0, 0}; //, 0, 0, 0, 0};
 int next_note = -1;
 
 long previousMillis = 0;
-long interval = 300;
+long interval = 200;
 
 void setup(){
   Serial.begin(9600);
@@ -56,9 +56,10 @@ int get_next_note(){
   // if no notes found
   if (next_note == -1){
     // loop from beginning
-    for (i = 0; i < previous_note+1; i++); {
+    for (i = 0; i < previous_note + 1; i++) {
       if (active_notes[i] == 1){
         next_note = i;
+        break;
       }
     }
   }
@@ -77,14 +78,13 @@ void play_note(int note){
     return;
   }
   Serial.print(note);
-  Serial.write("\n");
-  Serial.flush();
+  Serial.print("\n");
+  //Serial.flush();
 }
 
 void loop(){
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis > interval){
-    
     play_note(next_note);
     previousMillis = currentMillis;
     set_button_values();
