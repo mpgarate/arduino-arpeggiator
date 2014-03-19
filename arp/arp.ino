@@ -1,7 +1,10 @@
 
 const int POSSIBLE_NOTES = 7;
 const int button_pins[] = {13, 12, 11, 10, 9, 8, 7};
+
 int button_values[] = {0, 0, 0, 0, 0, 0, 0};
+
+const int led_pins[] = {6, 5, 4, 3, 2, A0, A1};
 
 // active_notes[i] == 1 if note i is active
 int active_notes[] = {0, 0, 0, 0, 0, 0, 0};
@@ -13,6 +16,10 @@ long interval = 200;
 
 void setup(){
   Serial.begin(9600);
+  int i = 0;
+  for(i = 0; i < POSSIBLE_NOTES; i++){
+    pinMode(led_pins[i], OUTPUT);
+  }
 }
 
 int get_button_value(int i){
@@ -80,14 +87,32 @@ void play_note(int note){
   //Serial.flush();
 }
 
+void start_led(int i){
+  if (i == -1) return;
+  digitalWrite(led_pins[i], HIGH);
+}
+
+void stop_leds(){
+  int i = 0;
+  for(i = 0; i < POSSIBLE_NOTES; i++){
+    digitalWrite(led_pins[i], LOW);
+  }
+}
+
 void loop(){
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis > interval){
     play_note(next_note);
-    previousMillis = currentMillis;
+    
+    stop_leds();
+    start_led(next_note);
+    
     set_button_values();
     set_active_notes();
+    
     next_note = get_next_note();
+    
     previous_note = next_note;
+    previousMillis = currentMillis;
   }
 }
