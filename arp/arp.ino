@@ -1,6 +1,7 @@
 
 const int POSSIBLE_NOTES = 7;
-const int button_pins[] = {13, 12, 11, 10, 9, 8, 7};
+//const int button_pins[] = {13, 12, 11, 10, 9, 8, 7};
+const int button_pins[] = {7, 8, 9, 10, 11, 12, 13};
 
 int button_values[] = {0, 0, 0, 0, 0, 0, 0};
 
