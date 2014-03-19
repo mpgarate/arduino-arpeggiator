@@ -19,14 +19,15 @@ AudioPlayer note, lastNote;
 int savedTime;
 int totalTime = 200;
 
-int lastIndex = -1;
+int lastIndex = 0;
+int noteIndex = -1; // the scale degree of the currently playing note
 
 LinkedList list = new LinkedList();
 
 void playNextNote(Boolean[] activeNotes){
   if (activeNotes.length == 0) return;
   String noteName = "";
-  int noteIndex = -1;
+  noteIndex = -1;
   for(int i = lastIndex + 1; i < activeNotes.length; i++){
     if (activeNotes[i] == true){
       noteName = indexToStringMap[i-1];
@@ -55,8 +56,14 @@ void playNextNote(Boolean[] activeNotes){
 
 void setup()
 {
+  /*
   String portName = Serial.list()[0];
   arduinoPort = new Serial(this, portName, 9600);
+  */
+  
+  arduinoPort = new Serial(this, Serial.list()[0],9600);
+  arduinoPort.bufferUntil('\n');
+  
   
   size(100, 100);
  
@@ -68,27 +75,16 @@ void setup()
 void draw()
 {
   // clear all notes on each pulse
-  activeNotes = new Boolean[] {false,false,false,false,false,false,false};
+  activeNotes = new Boolean[] {false,false,false,false,false,false,false};  
   
-  //list = new LinkedList();
-  while (arduinoPort.available() > 0){
-    input = arduinoPort.readStringUntil('*');
-    if (input != null){
-      btnVals = splitTokens(input,",*");
-      
-      for (int i = 0; i < btnVals.length; i++){
-        int value = parseInt(btnVals[i]);
-        activeNotes[value] = true;
-      }
-    }
-  }
-  
+  writePlayingNote();
+  requestNotes();
   
   int passedTime = millis() - savedTime;
   //println(passedTime + " : " + totalTime);
   if (passedTime > totalTime){
     playNextNote(activeNotes);
-    println("last index:" + lastIndex);
+    //println("last index:" + lastIndex);
     savedTime = millis();
   }
   else if (passedTime > 100){
@@ -96,4 +92,38 @@ void draw()
   }
   
   background(0);
+}
+
+void writePlayingNote(){
+  if (arduinoPort.available() <= 0) {
+    arduinoPort.write(noteIndex);
+  }
+}
+
+void requestNotes(){  
+  if (arduinoPort.available() <= 0) {
+    println("writing -100");
+    arduinoPort.write("-100");
+  }
+  else{
+    println("not available");
+    exit();
+  }
+}
+
+void serialEvent(Serial arduinoPort){
+ 
+  input = arduinoPort.readStringUntil('\n');
+  
+  if (input != null){
+    btnVals = splitTokens(input,",\n");
+    
+    for (int i = 0; i < btnVals.length; i++){
+      int value = parseInt(btnVals[i]);
+      println(value);
+      if (value == 0) return;
+      activeNotes[value] = true;
+    }
+  }
+  
 }
