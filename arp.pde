@@ -9,7 +9,7 @@ int btnVal1;
 int btnVal2;
 
 String [] btnVals;
-String [] indexToStringMap = new String[] {"C4","D4"};
+String [] indexToStringMap = new String[] {"C4","D4","E4","F4"};
 
 Boolean activeNotes[];
 
@@ -19,7 +19,7 @@ AudioPlayer note, lastNote;
 int savedTime;
 int totalTime = 200;
 
-int lastIndex = -1;
+int lastIndex = 0;
 
 LinkedList list = new LinkedList();
 
@@ -29,6 +29,7 @@ void playNextNote(Boolean[] activeNotes){
   int noteIndex = -1;
   for(int i = lastIndex + 1; i < activeNotes.length; i++){
     if (activeNotes[i] == true){
+      println("i: " + i);
       noteName = indexToStringMap[i-1];
       noteIndex = i;
       break;
