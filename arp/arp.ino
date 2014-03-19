@@ -5,7 +5,7 @@ const int button_pins[] = {7, 8, 9, 10, 11, 12, 13};
 
 int button_values[] = {0, 0, 0, 0, 0, 0, 0};
 
-const int led_pins[] = {6, 5, 4, 3, 2, A0, A1};
+const int led_pins[] = {A1, A0, 2, 3, 4, 5, 6};
 
 // active_notes[i] == 1 if note i is active
 int active_notes[] = {0, 0, 0, 0, 0, 0, 0};
@@ -13,7 +13,7 @@ int active_notes[] = {0, 0, 0, 0, 0, 0, 0};
 int next_note = -1;
 
 long previousMillis = 0;
-long interval = 200;
+long interval = 100;
 
 void setup(){
   Serial.begin(9600);

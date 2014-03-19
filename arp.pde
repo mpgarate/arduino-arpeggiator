@@ -11,14 +11,27 @@ float hz(String s){
   return Frequency.ofPitch(s).asHz();
 }
 
+/* C Major
 float [] indexToHz = new float[] {
   hz("C4"),
   hz("D4"),
   hz("E4"),
   hz("F4"),
   hz("G4"),
-  hz("A5"),
-  hz("B5")
+  hz("A4"),
+  hz("B4")
+};
+*/
+
+// A Minor
+float [] indexToHz = new float[] {
+  hz("A4"),
+  hz("B4"),
+  hz("C5"),
+  hz("D5"),
+  hz("E5"),
+  hz("F5"),
+  hz("G5")
 };
 
 Boolean activeNotes[];
