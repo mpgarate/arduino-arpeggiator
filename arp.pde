@@ -81,7 +81,7 @@ class SineInstrument implements Instrument
 void setup()
 {
   String portName = Serial.list()[0];
-  arduinoPort = new Serial(this, portName, 9600);
+  arduinoPort = new Serial(this, portName, 115200);
      
   minim = new Minim(this);
   
@@ -95,7 +95,7 @@ void setup()
 }
 
 void playNoteIndex(int noteIndex){
-  out.playNote( 0.0, 0.1, new SineInstrument(indexToHz[noteIndex]) );
+  out.playNote( 0.0, 0.2, new SineInstrument(indexToHz[noteIndex]) );
 }
  
  

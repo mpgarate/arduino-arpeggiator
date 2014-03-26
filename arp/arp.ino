@@ -13,10 +13,10 @@ int active_notes[] = {0, 0, 0, 0, 0, 0, 0};
 int next_note = -1;
 
 long previousMillis = 0;
-long interval = 100;
+long interval = 150;
 
 void setup(){
-  Serial.begin(9600);
+  Serial.begin(115200);
   int i = 0;
   for(i = 0; i < POSSIBLE_NOTES; i++){
     pinMode(led_pins[i], OUTPUT);
@@ -93,6 +93,7 @@ void start_led(int i){
   digitalWrite(led_pins[i], HIGH);
 }
 
+// stop single led with previous_note
 void stop_leds(){
   int i = 0;
   for(i = 0; i < POSSIBLE_NOTES; i++){
@@ -102,7 +103,7 @@ void stop_leds(){
 
 void loop(){
   unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis > interval){
+  if (currentMillis - previousMillis >= interval){
     play_note(next_note);
     
     stop_leds();
